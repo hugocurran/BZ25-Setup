@@ -12,7 +12,7 @@ ZTIER_IP=$(ip -4 addr show dev $INTERFACE | grep -oP '(?<=inet )\d+(\.\d+){3}' |
 
 # Read the config file to see which protocol is used
 #source <(grep -E '^[A-Za-z_][A-Za-z0-9]*=' /etc/mavproxy.conf)
-source <(grep = /etc/mavproxy.conf)
+source <(grep = /usr/local/etc/mavproxy.conf)
 
 echo $GCS_CONNECTION
 echo $GCS_UDP
