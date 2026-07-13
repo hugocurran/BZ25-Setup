@@ -14,7 +14,7 @@ zerotier-one.service
 	^
 mavproxy.service
 	Waits for zt0 to have an IP address
-	Outputs on udp:<zt0 address>:14550 --> GCS
+	Outputs on tcpin:<zt0 address>:5760 <-- GCS
 	Outputs on udp:127.0.0.1:14551 -> HUD2.0
 	|
 	|
