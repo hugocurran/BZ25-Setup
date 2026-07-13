@@ -15,11 +15,12 @@ sudo cp bin/*.py  bin/*.sh /usr/local/bin
 sudo cp mavproxy.conf /usr/local/etc
 
 # Download HUD2.0 from github and install in /usr/local/bin
-git clone https://github.com/hugocurran/hud2.0.git /usr/local/bin/hud
+sudo git clone https://github.com/hugocurran/hud2.0.git /usr/local/bin/hud
+cd /usr/local/bin/hud
 
 # run the hud setup to download dependencies and setup the venv (in hud/.venv)
 # This also installs mavproxy note that everything uses the hud venv
-usr/local/bin/hud/setup.sh
+sudo usr/local/bin/hud/setup.sh
 
 echo "Everything is now installed but not setup"
 echo
