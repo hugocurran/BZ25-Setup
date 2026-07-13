@@ -1,0 +1,17 @@
+[Unit]
+Description=MAVProxy Service
+After=network-online.target
+Wants=network-online.target zerotier-one.service
+
+[Service]
+Type=simple
+User=root
+Environment=PYTHONUNBUFFERED=1
+ExecStart=/usr/local/bin/mavproxy-interface-start.sh
+Restart=always
+RestartSec=5
+BindToInterface=lo zt0
+
+[Install]
+WantedBy=multi-user.target
+

@@ -1,0 +1,33 @@
+[Unit]
+Description=GStreamer Camera and OSD Compositor to SRT
+After=hud-generator.service
+Wants=network-online.target zerotier-one.service
+
+[Service]
+Type=simple
+User=root
+
+# 1. Block execution until zt0 exists and has an IP address assigned 
+# 2. Extract that specific IPv4 address and inject it into $ZTIER_IP
+ExecStartPre=/bin/bash -c 'while ! ip -4 addr show zt0 2>/dev/null | grep -q "inet"; do echo "Waiting for zt0 interface and IP address..."; sleep 2; done; systemctl set-environment ZTIER_IP=$(ip -4 addr show dev zt0 | grep -oP "(?<=inet )\d+(\.\d+){3}" | head -n1)'
+
+ExecStart=/usr/bin/gst-launch-1.0 -v \
+    v4l2src device=/dev/video0 ! video/x-raw,width=1280,height=720,framerate=30/1 ! queue ! comp.sink_0 \
+    v4l2src device=/dev/video10 ! video/x-raw,width=1280,height=720 ! videoconvert ! queue ! \
+    alpha method=custom target-r=0 target-g=0 target-b=0 angle=10 ! comp.sink_1 \
+    compositor name=comp sink_0::alpha=1.0 sink_1::alpha=1.0 ! \
+    videoconvert ! \
+    v4l2h264enc extra-controls="controls,h264_profile=4,video_bitrate=3000000;" ! \
+    "video/x-h264,level=(string)4" ! h264parse ! mpegtsmux ! \
+    srtclientsink uri=srt://$ZTIER_IP:9000?mode=listener
+
+# Wait a long time to allow Zerotier to stabilise
+TimeoutStartSec=120
+
+# Restart slowly if it falls over
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+
