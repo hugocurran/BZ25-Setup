@@ -23,8 +23,8 @@ echo $GCS_UDP
 # Execute MAVproxy with the appropriate setup
 # Note that we have to use python from the virtual environment
 
-VIRTUAL_ENV=/home/pi/venv
-PYTHON_VENV=/home/pi/venv/bin/python3
+VIRTUAL_ENV=/usr/local/bin/hud/.venv
+PYTHON_VENV=/usr/local/bin/hud/.venv/bin/python3
 
 if [[ "$GCS_CONNECTION" == "TCP" ]]; then
        exec $PYTHON_VENV ${VIRTUAL_ENV}/bin/mavproxy.py --master=/dev/ttyS0 --baudrate=57600 \
